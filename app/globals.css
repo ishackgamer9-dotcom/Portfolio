@@ -414,6 +414,12 @@ body {
   border-color: rgba(216, 50, 40, 0.2);
 }
 
+.project-card[data-project="02"] > div:first-child > div:first-child > span:first-child,
+.project-visual-panel[data-project="02"] > div:nth-child(2) > p:first-child,
+.project-visual-panel[data-project="02"] > div:nth-child(2) > div > span {
+  color: #000000 !important;
+}
+
 /* ============================================================
    TAG CHIP
    ============================================================ */
