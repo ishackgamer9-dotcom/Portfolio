@@ -1,40 +1,73 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import { identity } from "./site-data";
+import type { Metadata, Viewport } from "next";
+import { Space_Grotesk, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-space-grotesk",
   subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-jetbrains-mono",
   subsets: ["latin"],
+  weight: ["300", "400", "500", "600"],
+  display: "swap",
 });
+
+export const viewport: Viewport = {
+  themeColor: "#090817",
+};
 
 export const metadata: Metadata = {
-  title: `${identity.name} | ${identity.system} — Developer & World Builder`,
+  title: "ISHACK S — Software Engineer & AI Explorer",
   description:
-    "ISHACK S (ISK) — aspiring software and game developer exploring AI, creative technology, and interactive experiences.",
-  applicationName: identity.system,
-  authors: [{ name: identity.name }],
-  keywords: ["ISHACK S", "ISK", "developer portfolio", "software engineering", "game development"],
+    "Portfolio of ISHACK S — Computer Science and Engineering student exploring software engineering, artificial intelligence, computer vision, and game development.",
+  keywords: [
+    "ISHACK S",
+    "software engineer",
+    "portfolio",
+    "AI",
+    "machine learning",
+    "computer vision",
+    "web development",
+    "Chennai Institute of Technology",
+  ],
+  authors: [{ name: "ISHACK S" }],
   openGraph: {
-    title: `${identity.name} | ${identity.system} — Developer & World Builder`,
+    title: "ISHACK S — Software Engineer & AI Explorer",
     description:
-      "ISHACK S (ISK) — software, AI, and game development projects.",
+      "Computer Science and Engineering student building software, exploring AI, and solving technical problems through hands-on projects.",
     type: "website",
+    locale: "en_IN",
+    siteName: "ISHACK S Portfolio",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "ISHACK S — Software Engineer & AI Explorer",
+    description:
+      "Computer Science and Engineering student building software, exploring AI, and solving technical problems through hands-on projects.",
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({
+  children,
+}: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${spaceGrotesk.variable} ${jetbrainsMono.variable}`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="color-scheme" content="dark" />
+      </head>
+      <body>{children}</body>
     </html>
   );
 }
