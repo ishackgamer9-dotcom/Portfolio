@@ -141,7 +141,6 @@ function ArchiveCard({
       >
         {project.isCTF ? (
           <div className="ctf-project-heading">
-            <span className="ctf-project-number">04</span>
             <div>
               <span className="ctf-project-category">{project.category}</span>
               <h3>{project.name}</h3>
