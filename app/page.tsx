@@ -7,10 +7,12 @@ import Skills from "@/components/Skills";
 import Achievements from "@/components/Achievements";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
+import ScrollReveals from "@/components/ScrollReveals";
 
 export default function Home() {
   return (
     <>
+      <ScrollReveals />
       <Navbar />
       <main>
         <Hero />

@@ -14,11 +14,36 @@ const NAV_LINKS = [
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("");
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 40);
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    if (!("IntersectionObserver" in window)) return;
+
+    const sections = NAV_LINKS.map(({ href }) =>
+      document.querySelector<HTMLElement>(href),
+    ).filter((section): section is HTMLElement => section !== null);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visibleSections = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort(
+            (first, second) =>
+              first.boundingClientRect.top - second.boundingClientRect.top,
+          );
+        const active = visibleSections[0]?.target.id;
+        if (active) setActiveSection(active);
+      },
+      { rootMargin: "-25% 0px -65% 0px", threshold: 0 },
+    );
+
+    sections.forEach((section) => observer.observe(section));
+    return () => observer.disconnect();
   }, []);
 
   const handleNavClick = (
@@ -29,7 +54,12 @@ export default function Navbar() {
     setMenuOpen(false);
     const el = document.querySelector(href);
     if (el) {
-      el.scrollIntoView({ behavior: "smooth", block: "start" });
+      el.scrollIntoView({
+        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+          ? "auto"
+          : "smooth",
+        block: "start",
+      });
     }
   };
 
@@ -96,6 +126,8 @@ export default function Navbar() {
               <a
                 href={link.href}
                 onClick={(e) => handleNavClick(e, link.href)}
+                className={`navbar-link${activeSection === link.href.slice(1) ? " is-active" : ""}`}
+                aria-current={activeSection === link.href.slice(1) ? "location" : undefined}
                 style={{
                   display: "flex",
                   alignItems: "center",
@@ -108,15 +140,8 @@ export default function Navbar() {
                   color: "var(--text-secondary)",
                   textDecoration: "none",
                   textTransform: "uppercase",
-                  transition: "color 0.2s ease",
                   borderRadius: "2px",
                 }}
-                onMouseEnter={(e) =>
-                  (e.currentTarget.style.color = "var(--text-primary)")
-                }
-                onMouseLeave={(e) =>
-                  (e.currentTarget.style.color = "var(--text-secondary)")
-                }
               >
                 <span
                   style={{ color: "var(--accent-green)", fontSize: "0.6rem" }}
@@ -205,7 +230,7 @@ export default function Navbar() {
             borderTop: "1px solid var(--border-color)",
             padding: "1rem 2rem 1.5rem",
           }}
-          className="show-mobile"
+          className="show-mobile navbar-mobile-menu"
         >
           <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "0.25rem" }}>
             {NAV_LINKS.map((link) => (
@@ -213,6 +238,8 @@ export default function Navbar() {
                 <a
                   href={link.href}
                   onClick={(e) => handleNavClick(e, link.href)}
+                  className={`navbar-mobile-link${activeSection === link.href.slice(1) ? " is-active" : ""}`}
+                  aria-current={activeSection === link.href.slice(1) ? "location" : undefined}
                   style={{
                     display: "flex",
                     alignItems: "center",

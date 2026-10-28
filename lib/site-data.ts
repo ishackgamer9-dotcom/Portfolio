@@ -97,7 +97,7 @@ export const ARCHIVE_PROJECTS = [
     name: "The Final Stand — CTF Challenge",
     category: "Cybersecurity / CTF / Puzzle Design",
     description:
-      "A Capture The Flag challenge designed around investigation, clues, decoding, and problem-solving.",
+      "A Capture The Flag challenge designed around investigation, clues, decoding, and problem-solving. Try to see if you can solve it, its actually pretty fun to try out. This Challenge was designed and fully implemented from scratch by me and its related to Open-Source Intellligence type of questions.",
     tags: ["CTF", "Cybersecurity", "Puzzle Design", "Web"],
     repoUrl: "https://github.com/ISHACK-S/The-Final-Stand-CTF-Challenge",
     demoUrl: "https://the-final-stand-ctf.vercel.app/",

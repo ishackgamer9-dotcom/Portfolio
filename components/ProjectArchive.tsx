@@ -18,49 +18,75 @@ const STATUS_LABELS: Record<string, string> = {
 };
 
 export default function ProjectArchive() {
+  const archiveProjects = ARCHIVE_PROJECTS.filter((project) => !project.isCTF);
+  const ctfProject = ARCHIVE_PROJECTS.find((project) => project.isCTF);
+
   return (
-    <section
-      id="archive"
-      className="section-padding"
-      style={{ borderTop: "1px solid var(--border-color)" }}
-    >
-      <div className="container">
-        {/* Section header */}
-        <div style={{ marginBottom: "3rem" }}>
-          <div className="section-id" style={{ marginBottom: "1rem" }}>
-            02b / ADDITIONAL BUILDS
+    <>
+      <section
+        id="archive"
+        className="section-padding"
+        style={{ borderTop: "1px solid var(--border-color)" }}
+      >
+        <div className="container">
+          {/* Section header */}
+          <div style={{ marginBottom: "3rem" }}>
+            <div className="section-id" style={{ marginBottom: "1rem" }}>
+              02b / ADDITIONAL BUILDS
+            </div>
+            <h2
+              style={{
+                fontSize: "clamp(1.4rem, 2.5vw, 2rem)",
+                fontWeight: 700,
+                letterSpacing: "-0.01em",
+                color: "var(--text-primary)",
+                textTransform: "uppercase",
+              }}
+            >
+              MORE EXPERIMENTS &{" "}
+              <span className="gradient-text">BUILDS</span>
+            </h2>
           </div>
-          <h2
+
+          {/* Grid of archive cards */}
+          <div
+            className="archive-project-grid"
             style={{
-              fontSize: "clamp(1.4rem, 2.5vw, 2rem)",
-              fontWeight: 700,
-              letterSpacing: "-0.01em",
-              color: "var(--text-primary)",
-              textTransform: "uppercase",
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 300px), 1fr))",
+              gap: "1px",
+              background: "#D83228",
+              border: "1px solid var(--border-color)",
             }}
           >
-            MORE EXPERIMENTS &{" "}
-            <span className="gradient-text">BUILDS</span>
-          </h2>
+            {archiveProjects.map((project, index) => (
+              <ArchiveCard key={project.name} project={project} index={index} />
+            ))}
+          </div>
         </div>
+      </section>
 
-        {/* Grid of archive cards */}
-        <div
-          className="archive-project-grid"
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 300px), 1fr))",
-            gap: "1px",
-            background: "var(--border-color)",
-            border: "1px solid var(--border-color)",
-          }}
+      {ctfProject && (
+        <section
+          id="ctf-challenge"
+          className="section-padding ctf-feature-section"
+          aria-labelledby="ctf-feature-title"
         >
-          {ARCHIVE_PROJECTS.map((project, index) => (
-            <ArchiveCard key={project.name} project={project} index={index} />
-          ))}
-        </div>
-      </div>
-    </section>
+          <div className="container">
+            <div className="ctf-feature-heading">
+              <div className="section-id" style={{ marginBottom: "1rem" }}>
+                02C / CTF CHALLENGE
+              </div>
+              <h2 id="ctf-feature-title">BEYOND THE BUILD</h2>
+            </div>
+            <ArchiveCard
+              project={ctfProject}
+              index={ARCHIVE_PROJECTS.findIndex((project) => project.isCTF)}
+            />
+          </div>
+        </section>
+      )}
+    </>
   );
 }
 
@@ -73,13 +99,13 @@ function ArchiveCard({
 }) {
   return (
     <article
-      className="archive-project-card"
+      className={`archive-project-card${project.isCTF ? " ctf-project-card" : ""}`}
       data-project-index={index + 1}
       data-status={project.status}
       style={{
         background: "var(--bg-panel)",
         padding: "1.75rem",
-        display: "flex",
+        display: project.isCTF ? "grid" : "flex",
         flexDirection: "column",
         gap: "1rem",
         transition: "transform 0.25s ease, box-shadow 0.25s ease",
@@ -104,8 +130,8 @@ function ArchiveCard({
         />
       )}
 
-      {/* Header row */}
       <div
+        className="archive-project-header"
         style={{
           display: "flex",
           justifyContent: "space-between",
@@ -113,31 +139,41 @@ function ArchiveCard({
           gap: "0.5rem",
         }}
       >
-        <div>
-          <span
-            style={{
-              fontFamily: "var(--font-mono)",
-              fontSize: "0.58rem",
-              color: "var(--project-accent, var(--text-secondary))",
-              letterSpacing: "0.12em",
-              textTransform: "uppercase",
-              display: "block",
-              marginBottom: "0.35rem",
-            }}
-          >
-            {project.category}
-          </span>
-          <h3
-            style={{
-              fontSize: "1rem",
-              fontWeight: 600,
-              color: "var(--text-primary)",
-              lineHeight: 1.3,
-            }}
-          >
-            {project.name}
-          </h3>
-        </div>
+        {project.isCTF ? (
+          <div className="ctf-project-heading">
+            <span className="ctf-project-number">04</span>
+            <div>
+              <span className="ctf-project-category">{project.category}</span>
+              <h3>{project.name}</h3>
+            </div>
+          </div>
+        ) : (
+          <div>
+            <span
+              style={{
+                fontFamily: "var(--font-mono)",
+                fontSize: "0.58rem",
+                color: "var(--project-accent, var(--text-secondary))",
+                letterSpacing: "0.12em",
+                textTransform: "uppercase",
+                display: "block",
+                marginBottom: "0.35rem",
+              }}
+            >
+              {project.category}
+            </span>
+            <h3
+              style={{
+                fontSize: "1rem",
+                fontWeight: 600,
+                color: "var(--text-primary)",
+                lineHeight: 1.3,
+              }}
+            >
+              {project.name}
+            </h3>
+          </div>
+        )}
 
         {/* Status badge */}
         <span
@@ -158,6 +194,7 @@ function ArchiveCard({
 
       {/* Description */}
       <p
+        className="archive-project-description"
         style={{
           fontSize: "0.875rem",
           lineHeight: 1.7,
@@ -169,7 +206,10 @@ function ArchiveCard({
       </p>
 
       {/* Tags */}
-      <div style={{ display: "flex", flexWrap: "wrap", gap: "0.35rem" }}>
+      <div
+        className="archive-project-tags"
+        style={{ display: "flex", flexWrap: "wrap", gap: "0.35rem" }}
+      >
         {project.tags.map((tag) => (
           <span
             key={tag}
@@ -182,7 +222,10 @@ function ArchiveCard({
       </div>
 
       {/* Actions */}
-      <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
+      <div
+        className="archive-project-actions"
+        style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}
+      >
         {project.isCTF ? (
           <>
             {project.demoUrl && (
@@ -246,6 +289,30 @@ function ArchiveCard({
           </>
         )}
       </div>
+
+      {project.isCTF && (
+        <div className="ctf-preview-panel" aria-hidden="true">
+          <div className="ctf-preview-toolbar">
+            <span className="ctf-preview-dots">
+              <i />
+              <i />
+              <i />
+            </span>
+            <span>final-stand.ctf</span>
+          </div>
+          <div className="ctf-preview-code">
+            <p><span>01</span> <b>{"// THE FINAL STAND"}</b></p>
+            <p><span>02</span> <em>case_file</em> = <strong>&quot;RESTRICTED&quot;</strong></p>
+            <p><span>03</span> signal <em>::</em> <strong>detected</strong></p>
+            <p><span>04</span> <i>decode</i>(evidence)</p>
+            <p><span>05</span> <em>flag</em> = <strong>_</strong></p>
+          </div>
+          <div className="ctf-preview-status">
+            <span />
+            INVESTIGATION IN PROGRESS
+          </div>
+        </div>
+      )}
     </article>
   );
 }

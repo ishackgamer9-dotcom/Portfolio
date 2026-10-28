@@ -11,9 +11,10 @@ export default function Hero() {
           </div>
 
           <h1 className="hero-title">
-            I TURN IDEAS
-            <br />
-            <span>INTO REALITY.</span>
+            <span className="hero-title-line">I TURN IDEAS</span>
+            <span className="hero-title-line hero-title-accent">
+              INTO REALITY.
+            </span>
           </h1>
 
           <p className="hero-description">
